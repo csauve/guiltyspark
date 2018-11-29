@@ -1,0 +1,4 @@
+#!100
+
+*[1.0] TOGGLE_AIMBOT_ON !11(1);
+[0.5] AIM_AT_NODE !13(12);

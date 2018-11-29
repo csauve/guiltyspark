@@ -1,0 +1,52 @@
+# This script is not intended to be used on its own, but to  be included in another.
+# The including script is responsible for the priority of this one.
+
+# This decides on the best weapon to use depending on ammo and target distance.
+# It is assumed the including script has already give the aimbot a target.
+# This script uses storage value 3, so avoid using it in an including script.
+
+*[9] init_value3 !16(0);
+
+*[8] WEIGH_WEAPONS_FOR_TARGET_DISTANCE
+{    
+    [$22 3.5 <] IF_CLOSE_RANGE
+    {
+        *[2] weapon0_is_close !16($32 $39 8 = $39 2 = | $39 10 = | $39 3 = | $39 1 = | -);
+        *[1] weapon1_is_close !16($32 $40 8 = $40 2 = | $40 10 = | $40 3 = | $40 1 = | +);
+    }
+    [0.5] ELSE
+    {
+        [$22 35 <] IF_MID_RANGE
+        {
+            *[2] weapon0_is_mid !16($32 $39 6 = $39 7 = | -);
+            *[1] weapon1_is_mid !16($32 $40 6 = $40 7 = | +);
+        }
+        [0.5] ELSE # long range
+        {
+            *[2] weapon0_is_long !16($32 $39 11 = -);
+            *[1] weapon1_is_long !16($32 $40 11 = +);
+        }
+    }
+}
+
+*[6] WEIGH_WEAPONS_FOR_CLIP/HEAT
+{
+    [$41 0 =] weapon0_is_empty/overheating !16($32 2 +);
+    [$42 0 =] weapon1_is_empty/overheating !16($32 2 -);
+    [0.5] nop !99(0);
+}
+
+*[5] WEIGH_WEAPONS_FOR_RESERVE/BATTERY
+{
+    [$43 0 =] weapon0_useless !16($32 4 +);
+    [$44 0 =] weapon1_useless !16($32 4 -);
+    [0.5] nop !99(0);
+}
+
+# now, value3 < 0 means weapon0 preferred, > 0 weapon1 preferred, nop if = 0
+*[0] SELECT_WEAPON
+{
+    #*[10] dbg_wbias !0($32);
+    [$32 0 < $38 1 = & $32 0 > $38 0 = & |] backpack_reload !33(0);
+    [0.5] nop !99(0);
+}

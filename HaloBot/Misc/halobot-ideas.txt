@@ -1,0 +1,178 @@
+TREE APPEARANCE
+
+	SLAYER (gamestate)
+		kill enemies (nearest enemy)		risk?
+			navigate to enemy		dist
+			strafe				dist
+			shoot				visible?
+			melee				dist
+			grenade				ammo, dist
+		get items				risk?
+			get health			health %
+			get powerup			default?
+			get weapons			default?
+		*manage current weapon
+			zoom
+			switch
+
+SPECIFICATIONS
+
+	-Each node has two lists of internal information. The first list is the list of values to query to determine the current node's priority.
+	 If the node is chosen (highest priority compared to siblings), then the second list will be evaluated. In the second list, users can specify which information a node contains for optimization purposes.
+	 This allows the algorithm to quickly decide which initial subtree to take without calculating all the extra information required by the roots of the trimmed subtree but not necessarily its root.
+
+	-When calculating the internal values, trickle up to find them. Search both the primary and secondary lists. If root reached, query the gamestate.
+
+	-Information that can be queried is list of gamestate properties.
+
+	-Allow the user to set the poll rate for the tree. This affects how quickly the bot can make decisions and react to changes.
+	 At every interval, start at the root and determine the highest priority task, then execute that task.
+
+	-Some nodes can be designated as concurrent (*), meaning once they are executed then the tree reverses and goes to the next highest priority item.
+
+	-A node's children will be other nodes or specific bot functions.
+	 When the node is chosen for execution, the algorithm will execute the children tasknodes. Functions and child nodes are both tasknodes. Don't forget concurrency.
+
+	-Once the algorithm has finished, set the AI state to "ready". The process can only begin each interval if the algorithm has finished making a decision.
+	
+	-FID queue returned to root, executed by AI. The FID queue is the list of all functions that can be executed concurrently.
+
+	-DID-evalutating function should return floats only. All priority calculation is done on floats.
+
+	-DIDs in primary & seconday should be accompanied by baked locations they can be found. On baking: create calculation tree from priority expression.
+
+CLASSES
+
+	TASKNODE
+	-concurrency bool
+	-parent node
+	-priority expression tree
+	-primary information list (priority calculation)
+	-calcPriority()
+	-abstract execute()		//adds local FIDs to FID Queue (passed down by ref), then calls highest priority child/children
+
+	FUNCTION extends TASKNODE
+	-FID
+	-execute()
+
+	SUBTASK extends TASKNODE
+	-subtask list
+	-secondary information list (pass-down)
+	-calcsSecondary()
+	-execute()
+
+	AI
+	-ready bool
+	-ai_stopped bool
+	-root tasknode
+	-timer
+	
+ALGORITHMS
+	
+	//top level handling in AI class
+	timer tick event()
+	{
+
+		
+	}
+	
+	
+	//execute method in a SUBTASK
+	execute(Queue FIDs)
+	{
+		calcSecondary();
+
+		//sort subtask list by subtask priority (call priority function of each). Simply place concurrent nodes first, then the highest priority. Ignore rest.
+		for (each subtask t)
+		{
+			t.execute(FIDs);
+			if (t concurrent)
+				continue;
+			else
+				break;
+		}
+		
+	}	
+	
+	//execute method in a FUNCTION
+	execute(Queue FIDs)
+	{
+		FIDs.add(this.FID);
+	}
+
+	
+	//file parsing and tree building algorithm in AI. Called with buildTree(s, root);
+	buildTree(Scanner s, TreeNode parent)
+	{
+		while (s.next() != "}")
+		{
+			//scan for node name
+
+			if (name is a valid FID)
+			{
+				//create function node, p
+				p.FID = FID
+			}
+			else if (name is a valid subtask name)
+				//create subtask, p
+			else
+				//report invalid child node, name
+
+			parent.addChild(p);
+			p.name = name;
+			p.parent = parent;
+
+			if (name was concurrent)
+				p.concurrent = true;
+
+			//scan for priority_expression
+			p.createPriorityExpressionTree(priority_expression);
+
+			if (p is a subtask)
+			{
+				//scan for secondary_list
+				p.createSecondaryList(secondary_list);
+
+				//assert "{"
+			}
+			
+			buildTree(s, p);
+		}
+	}
+
+
+FILE APPEARANCE (WIP)
+-how to differentiate a function from a subtask
+
+# $a = some_variable
+...
+
+tasknode0 [priority expression] [secondary list]
+{
+	tasknode1* [priority expression] [secondary list]
+	{
+		
+		!FID* [priority expression]
+		!FID [priority expression]
+	}
+
+	tasknode2 [priority expression] [secondary list]
+	{
+		!FID [priority expression]
+	}
+}
+
+
+
+FILE APPEARANCE 2
+
+#<comment>
+
+*[<postfix priority expression>] {
+
+	*[<postfix priority expression>] !<action>(<params>);
+
+}
+
+
+

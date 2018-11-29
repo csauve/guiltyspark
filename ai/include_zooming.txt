@@ -1,0 +1,17 @@
+# This script is not intended to be used on its own, but to  be included in another.
+# The including script is responsible for the priority of this one.
+
+# This handles zooming in and out according to the target's distance and visibility.
+
+*[8] WEIGH_WEAPONS_FOR_TARGET_DISTANCE
+{    
+    [$22 20 <] IF_CLOSE_RANGE
+    {
+        [1] zoom_out !30(0);
+    }
+    [0.5] ELSE
+    {
+        [0.5] zoom_out !30(0);
+        [$49] zoom_in !30(1);
+    }
+}

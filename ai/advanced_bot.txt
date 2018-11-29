@@ -1,0 +1,63 @@
+#!100
+
+[0 $15 =] INIT
+{
+    *[1] stop_init !9(1);
+    *[1] start_aimbot !11(1);
+}
+
+[0.5] RUN
+{
+    *[10] debug_im_running !0(0);
+    
+    [$21 0 =] IF_DEAD
+    {
+        # [1] chat !37(2);
+    }
+    
+    [0.5] IF_NOT_DEAD
+    {
+        *[7] get_new_target_closest !1($9);
+        
+        *[5] MANAGE_WEAPONS
+        {
+            >include_weapon_management.txt
+        }
+        
+        *[4] ZOOM
+        {
+            >include_zooming.txt
+        }
+        
+        *[3] ATTACK
+        {
+            [$49 $13 |] IF_TARGET_VISIBLE
+            {
+                *[$15 0 > 2 *] reset_counter !9(0);
+                *[1] decrement_counter !9($15 1 -);
+                
+                *[1] disable_look_ahead !14(0);
+                *[1] enable_strafe !24(1);
+                *[$15 -7 <] DO_ATTACK
+                {
+                    >include_attack.txt
+                }
+                
+                [0.5] nop !99(0);
+            }
+            [0.5] TARGET_NOT_VISIBLE
+            {
+                *[$15 0 < 2 *] reset_counter !9(0);
+                *[1] increment_counter !9($15 1 +);
+                
+                *[1] disable_strafe !24(0);
+                *[$15 10 >] enable_look_ahead !14(1);
+                *[$15 10 >] reload !29(0);
+                
+                [0.5] nop !99(0);
+            }
+        }
+        
+        *[2] goto_player !3($9);
+    }
+}

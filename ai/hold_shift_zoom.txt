@@ -1,0 +1,27 @@
+#!100
+# this script zooms in when the shift key is held, but zooms out when it's not
+
+[0.5] SHIFT_NOT_HELD {
+	[0.5] SHIFT_NOT_HELD_REPEAT {
+		# put things here to always be executed when shift isn't held
+		[1] ZOOM_TO_0 !30(0);
+	}
+
+	*[1.0] SET_VALUE5 !18(1);
+}
+
+[$14] SHIFT_KEY_IS_HELD {
+	*[$34] PERFORM_ACTION_ONCE {
+		# anything here is only executed once when shift is first held
+
+		
+	}
+
+	*[0.5] SET_VALUE5 !18(0);
+
+	[0.25] SHIFT_HELD_REPEAT {
+		# anything put here will be executed repeatedly as shift is held
+		
+		[1] ZOOM_TO_1 !30(1);
+	}
+}

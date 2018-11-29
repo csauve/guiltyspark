@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+gedit syntax colouring for GuiltySpark scripts
+-->
+
+
+<language id="g" _name="GuiltySpark" version="2.0" _section="Scripts">
+  <metadata>
+    <property name="mimetypes">text/x-c;text/x-csrc</property>
+    <property name="globs">*.gss</property>
+  </metadata>
+
+    <styles>
+        <style id="comment" _name="Comment" map-to="def:comment"/>
+        <style id="included-file" _name="Included File" map-to="def:preprocessor"/>
+        <style id="keyword" _name="Keyword" map-to="def:keyword"/>
+        <style id="postfix" _name="Postfix Expression" map-to="def:string"/>
+        <style id="data-source" _name="Data Source" map-to="def:special-char"/>
+        <style id="fid" _name="FID" map-to="def:special-constant"/>
+    </styles>
+
+    <definitions>
+
+        <context id="g" class="no-spell-check">
+            <include>
+                <context id="comment" style-ref="comment" end-at-line-end="true" class="comment" class-disabled="no-spell-check">
+                    <start>#</start>
+                </context>
+                
+                <context id="included-file" style-ref="included-file">
+                    <start>></start>
+                    <end>.txt</end>
+                </context>
+                
+                <context id="keyword" style-ref="keyword">
+                    <match>\*</match>
+                </context>
+                
+                        
+                <context id="data-source" style-ref="data-source">
+                    <match>\$\d+</match>
+                </context>
+               
+                <context id="postfix-priority" style-ref="postfix">
+                    <start>\[</start>
+                    <end>\]</end>
+                    <include>
+                        <context ref="data-source"/>
+                    </include>              
+                </context>
+
+                <context id="postfix-parameter" style-ref="postfix">
+                    <start>\(</start>
+                    <end>\)</end>
+                    <include>
+                        <context ref="data-source"/>
+                    </include>
+                </context>
+                
+                <context id="fid" style-ref="fid">
+                    <match>!\d+</match>
+                </context>
+            </include>
+        </context>
+    </definitions>
+</language>

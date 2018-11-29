@@ -1,0 +1,15 @@
+#!100
+
+[0 $15 =] INIT {
+	*[1] SET_VALUE1 !9(1);
+	*[1] START_AIMBOT !11(1);
+}
+
+[0.5] RUN {
+	*[1] GOTO_CLOSEST_ENEMY !3($9);
+	[0.5] SET_TARGET !1($9);
+
+	*[$49] SHOOT_AT_THEM {
+		[1] MOUSE1 !6(30);
+	}
+}

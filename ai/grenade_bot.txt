@@ -1,0 +1,29 @@
+# when shift isn't held, this tasknode has the highest priority. it is not concurrent
+[0.5] SHIFT_NOT_HELD {
+	*[1.0] TOGGLE_AIMBOT_OFF !11(0);
+
+	# VALUE1 set to 1, meaning the aimbot is paused
+	*[1.0] SET_VALUE1 !9(1);
+}
+
+# if shift is held, this has a higher priority than SHIFT_NOT_HELD and is executed
+[$14] SHIFT_KEY_IS_HELD {
+	# if VALUE1 ($15) is 1, bot is paused so execute this
+	*[$15] START_AIMBOT_ONCE {
+		*[1.0] TOGGLE_AIMBOT_ON !11(1);
+		
+		# set VALUE1 to 0 so the aimbot is not restarted again while shift held
+		*[1.0] SET_VALUE1 !9(0.0);
+
+		# gets the player index of player you're looking at ($29) and stores it in VALUE2
+		*[1.0] SET_VALUE2 !10($29);
+
+		*[1.0] SET_PROJECTILE_VELOCITY !21(10);
+		*[1.0] ENABLE_ARC_MODE !19(1);
+	}
+
+	# set aimbot's current target to whoever was selected in START_AIMBOT_ONCE.
+	# note this tasknode is not concurrent, so START_AIMBOT_ONCE doesn't get executed unless
+	# its priority is > 0.5 (which is when the aimbot is paused)
+	[0.5] SET_TARGET_PLAYER !1($16);
+}

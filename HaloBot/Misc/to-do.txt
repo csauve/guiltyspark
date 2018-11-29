@@ -1,0 +1,94 @@
+PRE-RELEASE
+---------------------------------------
+- DirectX can't draw to the control when Halo is fullscreen. Check that the device exists
+
+	Error in the application.
+	-2005530520 (D3DERR_DEVICELOST)
+	   at Microsoft.DirectX.Direct3D.Device.PresentInternal(tagRECT* sourceRectangle, tagRECT* destRectangle, IntPtr overrideWindow)
+	   at Microsoft.DirectX.Direct3D.Device.PresentInternal(tagRECT* sourceRectangle, tagRECT* destRectangle, Control overrideWindow)
+	   at Microsoft.DirectX.Direct3D.Device.Present()
+	   at HaloBot.Form1.dxpanel_Paint(Object sender, PaintEventArgs e)
+
+POST-RELEASE
+---------------------------------------
+- full automation mode
+- multiple version support
+- regroup FIDs and data sources
+- code profiling?
+
+
+CHANGELOG
+---------------------------------------
+
+1.0.0 Beta
+----------------------------
+- Released to beta testers
+
+1.0.8 Beta
+----------------------------
+- Added random node data source ($35)
+- Zoom level goes up to 25 now
+- The size of drawn links and circles is now adjustable
+- Setting the aimbots projectile velocity to 0 now means ignore travel time
+- Fixed a case where setting view angles incorrectly resulted in an ingame glitch
+- Enforced default properties upon starting the AI: storage values are 0,
+  arc mode is off, gravity scale is 1, projectile velocity is 0, look-ahead mode
+  is off, and strafe mode is off
+- Aimbot wobble increased slightly
+- ENABLE/DISABLE_LOOK_AHEAD replaced with a single FID SET_LOOK_AHEAD_MODE (14);
+  a parameter of 0 means off, anything else means on
+- Added strafe mode FID (24); a parameter of 0 means off, anything else means on
+
+1.0.20 Beta
+----------------------------
+- Strafing mode no longer has an effect when following jump or look-ahead links
+- Fixed a case where GuiltySpark would encounter an exception if Halo closed first
+- FIDs with boolean parameters (such as for enabling/disabling modes) now intererpret 0 as false and anything else as true (as opposed to strictly 1 = true)
+- START/PAUSE_AIMBOT were replaced with a single FID TOGGLE_AIMBOT (11) with parameter 0 meaning pause, otherwise start
+- Added exchange weapon, action, crouch, jump, switch weapon, switch grenade, melee, reload, backpack reload, zoom, and flashlight FIDs
+- MOUSE1 and MOUSE2 FIDs take a different parameter format now; -1 is click down, 0 is click up, and any value >0 performs a full click with that number of milliseconds in between button down and up
+- Loading an AI file with a missing included file now results in loading failure
+- The AI output text window now automatically scrolls as new lines are added, and the auto-scrolling for the graph output window is smoother
+- Added ZOOM_LEVEL ($36) and FLASHLIGHT ($37) data sources
+- Added support for new operators in postfix expressions: compare (=, >, <), logic (|, &), and math (^, %, `, ~)
+- FID 0 (print) now uses its task name as a label when printing
+- Added data sources and FIDs for weapon management
+- Fixed how the bot would get temporarily stuck following a path when the AI has found a newer one
+- Fixed look-ahead links conflicted with smooth aiming
+- Fixed an exception when pathfinding failed and the walking thread continued, resulting in following an empty path
+- Added hotkeys to start (F11) and stop (F12) the AI
+
+1.0.33 Release Candidate 1
+----------------------------
+- Added random number data source ($48)
+- The last 10 commands are now stored and can be listed with the "history" command. The command itself is not stored
+- Added "!!" command to re-execute the last command and "!<#>" to re-execute the <#>th last command. Not stored in history
+- Pressing the up arrow key in the command input box cycles through previous commands
+- Renamed "clear" command to "deleteall" in case people confuse "clear" for "cls"
+- Added a "where <#>" command to focus the graph view on given node
+- The graph view now uses DirectX acceleration for reduced CPU usage
+- The graph view's draw order, colours, and font were changed to make node numbers more readable
+- A comment of the form #!<#> in an AI script will set the AI interval automatically
+- Added a chat FID to type messages from text files into the ingame chat
+- Further increased the zoom upper bound
+- The graph view can now center around an arbitrary Z coordinate; hold SHIFT when dragging to pan along the Z axis
+- Rotating the view now unchecks Auto-Rotate
+- Fixed how pressing INSERT to place nodes wouldn't work with camera mode when auto-link was disabled
+- Changed the aimbot loop thread to a timer based system which should hopefully stop the random performance issues
+
+1.0.41 Release Candidate 2
+----------------------------
+- Fixed some aimbot code that went into an infinite loop rarely
+- Remapped all stock maps' weapon IDs to a common set. Weapon management in custom maps is unsupported
+- Improved error detection and handling in the script compiler
+- Added the deleteiso command to delete all isolated nodes
+- Added advanced  target visibility detection
+- Stopped crashes involving DirectX when Halo runs fullscreen
+- Enabling look-ahead mode by script or UI now causes smooth aiming. Look-ahead links retain their behaviour of snapping the aim
+
+1.0.43 Release Candidate 3
+----------------------------
+- Fixed aimbot not locking onto human targets in ballistics mode
+- Prevented the user from starting the AI multiple times
+- Fixed look-ahead mode having no effect because the aimbot was not started.
+- Fixed a bug where invalid target positions caused BSP ray collision detection to fail

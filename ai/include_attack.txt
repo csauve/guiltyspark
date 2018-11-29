@@ -1,0 +1,8 @@
+# This script is not intended to be used on its own, but to  be included in another.
+# The including script is responsible for the priority of this one.
+
+# This script decides between shooting and meleeing based on distance. It could
+# also be extended to include grenade throwing
+
+[$22 0.5 <] melee !28(0);
+[0.5] shoot !6(30);
