@@ -1,6 +1,7 @@
 # GuiltySpark for Halo CE 1.08
-Version: 1.0.43
-Release: Dec 26th, 2011
+Version: 1.0.43 (released Dec 26th, 2011)
+
+**This project is not being maintained and exists for archive purposes.**
 
 GuiltySpark is a user-programmable automation engine for Halo CE. Users can create scripts that control the player's ingame reactions and behaviours. Scripts can range from simple key macros to bots that play the game without any user interaction. When activated, GuiltySpark controls the game for you by simulating mouse movement and keyboard input. Advanced scripts can take advantage of user-created pathfinding graphs.
 
